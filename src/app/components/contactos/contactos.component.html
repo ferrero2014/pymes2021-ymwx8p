@@ -1,0 +1,183 @@
+<div class="tituloPagina">
+  {{ Titulo }} <small>{{ TituloAccionABMC[AccionABMC] }}</small>
+</div>
+<!--Form de menu-->
+<form *ngIf="AccionABMC == 'L'">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <button type="button" class="btn btn-primary" (click)="Buscar()">
+        <i class="fas fa-search"> </i> Buscar
+      </button>
+      <button type="button" class="btn btn-primary" (click)="Agregar()">
+        <i class="fas fa-plus"> </i>
+        Agregar
+      </button>
+    </div>
+  </div>
+</form>
+
+<!--Tabla de busqueda-->
+<table
+  class="table table-hover table-sm table-bordered table-striped"
+  *ngIf="Contactos.length && AccionABMC == 'L'"
+>
+  <thead>
+    <th class="text-center">Id</th>
+    <th class="text-center">Nombre</th>
+    <th class="text-center">Fecha Nacimiento</th>
+    <th class="text-center">Telefono</th>
+    <th class="text-center">Acciones</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let contacto of Contactos">
+      <td>{{ contacto.$id }}</td>
+      <td>{{ contacto.Nombre }}</td>
+      <td>{{ contacto.FechaNacimiento | date }}</td>
+      <td>{{ contacto.Telefono }}</td>
+      <td>
+        <button
+          class="btn btn-sm btn-outline-primary"
+          title="Consultar"
+          (click)="Consultar(contacto)"
+        >
+          <i class="fas fa-eye"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+  <h6>Registros: {{ Contactos.length }}</h6>
+</table>
+
+<!--Formulario para agregar-->
+<form
+  name="FormContacto"
+  [formGroup]="FormContacto"
+  *ngIf="AccionABMC == 'A' || AccionABMC == 'C'"
+>
+  <div class="container-fluid">
+    <fieldset [disabled]="AccionABMC == 'C'">
+      <div class="row">
+        <div class="col-sm-12 col-md-4">
+          <label class="col-form-label">Nombre</label>
+        </div>
+        <div class="col-sm-12 col-md-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="Nombre"
+            [ngClass]="{
+              'is-invalid':
+                (FormContacto.controls.Nombre.touched || submitted) &&
+                FormContacto.controls.Nombre.errors
+            }"
+          />
+          <div
+            class="validacion"
+            *ngIf="
+              (FormContacto.controls.Nombre.touched || submitted) &&
+              FormContacto.controls.Nombre.errors?.required
+            "
+          >
+            Dato requerido.
+          </div>
+          <div
+            class="validacion"
+            *ngIf="
+              (FormContacto.controls.Nombre.touched || submitted) &&
+              FormContacto.controls.Nombre.errors?.maxlength
+            "
+          >
+            Dato texto, maximo 50 caracteres.
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-4">
+          <label class="col-form-label">Fecha Nacimiento</label>
+        </div>
+        <div class="col-sm-12 col-md-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="FechaNacimiento"
+            [ngClass]="{
+              'is-invalid':
+                (FormContacto.controls.FechaNacimiento.touched || submitted) &&
+                FormContacto.controls.FechaNacimiento.errors
+            }"
+          />
+          <div
+            class="validacion"
+            *ngIf="
+              (FormContacto.controls.FechaNacimiento.touched || submitted) &&
+              FormContacto.controls.FechaNacimiento.errors?.required
+            "
+          >
+            Dato requerido.
+          </div>
+          <div
+            class="validacion"
+            *ngIf="
+              (FormContacto.controls.FechaNacimiento.touched || submitted) &&
+              FormContacto.controls.FechaNacimiento.errors?.pattern
+            "
+          >
+            Dato fecha, formato dd/mm/aaaa.
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-4">
+          <label class="col-form-label">Telefono</label>
+        </div>
+        <div class="col-sm-12 col-md-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="Telefono"
+            [ngClass]="{
+              'is-invalid':
+                (FormContacto.controls.Telefono.touched || submitted) &&
+                FormContacto.controls.Telefono.errors
+            }"
+          />
+          <div
+            class="validacion"
+            *ngIf="
+              (FormContacto.controls.Telefono.touched || submitted) &&
+              FormContacto.controls.Telefono.errors?.required
+            "
+          >
+            Dato requerido.
+          </div>
+          <div
+            class="validacion"
+            *ngIf="
+              (FormContacto.controls.Telefono.touched || submitted) &&
+              FormContacto.controls.Telefono.errors?.pattern
+            "
+          >
+            Formato incorrecto
+          </div>
+        </div>
+      </div>
+    </fieldset>
+    <hr />
+    <div class="row justify-content-center">
+      <button
+        type="button"
+        class="btn btn-warning"
+        (click)="Guardar()"
+        *ngIf="AccionABMC == 'A'"
+      >
+        <i class="fas fa-check"></i>
+        Grabar
+      </button>
+      <button type="button" class="btn btn-warning" (click)="Volver()">
+        <i class="fas fa-undo"></i>
+
+        {{ AccionABMC == 'A' ? 'Cancelar' : 'Volver' }}
+      </button>
+    </div>
+  </div>
+</form>
